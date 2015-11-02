@@ -1,6 +1,6 @@
 #Parrot
 
-1. users can see a list of links with titles
+1. users can see a list of links with titles and urls, which they can click, and are sorted by time
 2. users can post new links
 3. everyone is anonymous but different users are identified à la yikyak
 4. they can vote them up and down
