@@ -10,6 +10,16 @@
     </head>
     <body>
 
+        <div id="auth">
+            {% load account %}
+            {% if user.is_authenticated %}
+            You are signed in as: {% user_display user %}
+            <a href="/accounts/logout/">log out</a>
+            {% else %}
+            <a href="/accounts/login/">log in</a> or <a href="/accounts/signup/">sign up</a>
+            {% endif %}
+        </div>
+
         {% block links %}
 
         {% endblock links %}
