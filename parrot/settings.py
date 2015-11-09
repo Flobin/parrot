@@ -102,3 +102,4 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+os.environ['DJANGO_LIVE_TEST_SERVER_ADDRESS'] = 'localhost:8000'

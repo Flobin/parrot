@@ -1,5 +1,6 @@
 from .base import FunctionalTest
 from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
 
 class MainTest(FunctionalTest):
 
@@ -7,7 +8,18 @@ class MainTest(FunctionalTest):
         # Person visits the site
         self.browser.get(self.server_url)
 
-        # Sees several links
+        # Goes to submit a new link
+        self.browser.find_element_by_class_name('submit-link').click()
+
+        # Sees the submit page
+        self.assertIn("Submit a Link", self.browser.title)
+
+        # Submits a link
+        self.browser.find_element_by_id("title").send_keys('Poop')
+        self.browser.find_element_by_id("url").send_keys('http://poop.bike')
+        self.browser.find_element_by_id("url").send_keys(Keys.ENTER)
+
+        # Is redirected and sees her link
         posts = self.browser.find_elements_by_class_name('link')
         self.assertGreater(len(posts),0)
 
@@ -15,3 +27,7 @@ class MainTest(FunctionalTest):
         firstpost = posts[0]
         firstlink = firstpost.find_element_by_tag_name('a').click()
         self.assertGreater(len(self.browser.window_handles), 0)
+
+        # Posts have scores
+        score = firstpost.find_elements_by_class_name('link-score')
+        self.assertIsNotNone(score)

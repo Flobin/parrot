@@ -1,0 +1,16 @@
+{% extends 'posts/base.html' %}
+
+{% block title_addition %}Front Page{% endblock title_addition %}
+
+{% block links %}
+<ul id="links">
+    {% for link in links %}
+    <li class="link">
+        <a href="{{ link.url }}" target="_blank" class="link-title">{{ link.title }}</a><br>
+        <span class="link-score">{{ link.score }}</span>
+    </li>
+    {% endfor %}
+</ul>
+
+<a href="{% url 'submit' %}" class="submit-link">Submit a new link</a>
+{% endblock links %}
