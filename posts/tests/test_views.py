@@ -4,6 +4,7 @@ from django.core.urlresolvers import resolve
 from django.test import TestCase
 from django.http import HttpRequest
 from django.utils import timezone
+from django.contrib.auth.models import User
 
 from posts.views import all_links
 from posts.models import Link
@@ -32,6 +33,12 @@ class HomePageTest(TestCase):
         self.assertEqual(links[1], first_link)
 
 class SubmitViewTest(TestCase):
+
+    def setUp(self):
+        user = User.objects.create(username='testuser')
+        user.set_password('12345')
+        user.save()
+        self.client.login(username='testuser', password='12345')
 
     def test_displays_link_form(self):
         response = self.client.get('/submit/')

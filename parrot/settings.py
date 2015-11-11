@@ -43,6 +43,7 @@ INSTALLED_APPS = (
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.persona',
+    'allauth.socialaccount.providers.twitter',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -95,7 +96,7 @@ LOGIN_REDIRECT_URL = '/'
 ACCOUNT_EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL=None
 ACCOUNT_EMAIL_REQUIRED=True
 ACCOUNT_AUTHENTICATION_METHOD="email"
-ACCOUNT_EMAIL_VERIFICATION = "required"
+ACCOUNT_EMAIL_VERIFICATION = "optional"
 # allauth end
 
 WSGI_APPLICATION = 'parrot.wsgi.application'
