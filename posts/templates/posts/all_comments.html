@@ -1,0 +1,16 @@
+{% extends 'posts/base.html' %}
+
+{% block title_addition %}Comments{% endblock title_addition %}
+
+{% block comments %}
+
+<h1>Comments for:</h1>
+
+<ul id="comments">
+    {% for comment in comments %}
+    <li class="comment">
+        {{ comment.text }}
+    </li>
+    {% endfor %}
+</ul>
+{% endblock comments %}

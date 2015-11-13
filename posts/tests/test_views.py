@@ -7,7 +7,7 @@ from django.utils import timezone
 from django.contrib.auth.models import User
 
 from posts.views import all_links
-from posts.models import Link
+from posts.models import Link, Comment
 from posts.forms import LinkForm
 
 class HomePageTest(TestCase):
@@ -31,6 +31,22 @@ class HomePageTest(TestCase):
         links = response.context[0]['links']
         self.assertEqual(links[0], second_link)
         self.assertEqual(links[1], first_link)
+
+class CommentsViewTest(TestCase):
+
+    def test_comments_view_renders_comments_template(self):
+        link = Link.objects.create(title='foo',url='http://google.com')
+        response = self.client.get('/{0}/'.format(link.id))
+        self.assertTemplateUsed(response, 'posts/comments.html')
+
+    def test_comments_are_displayed_chronologically(self):
+        link = Link.objects.create(title='bar',url='http://reddit.com',posted=timezone.now()-timedelta(days=1))
+        first_comment = Comment.objects.create(text="poop",content_object=link)
+        second_comment = Comment.objects.create(text="butt",content_object=link,posted=timezone.now()-timedelta(days=2))
+        response = self.client.get('/{0}/'.format(link.id))
+        comments = response.context[0]['comments']
+        print(comments)
+        #self.assertGreater(comments, 0)
 
 class SubmitViewTest(TestCase):
 

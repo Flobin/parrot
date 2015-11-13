@@ -7,7 +7,8 @@
     {% for link in links %}
     <li class="link">
         <a href="{{ link.url }}" target="_blank" class="link-title">{{ link.title }}</a><br>
-        <span class="link-score">{{ link.score }}</span>
+        <span class="link-score">{{ link.score }}</span><br>
+        <a href="/{{ link.id }}">comments</a>
     </li>
     {% endfor %}
 </ul>
