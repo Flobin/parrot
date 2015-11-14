@@ -1,5 +1,6 @@
 from django.test import TestCase
 from django.core.exceptions import ValidationError
+from django.contrib.contenttypes.models import ContentType
 
 from posts.models import Link, Comment
 
@@ -25,7 +26,7 @@ class LinksAndCommentsModelsTest(TestCase):
 
     def test_comment_belongs_to_link(self):
         link = Link.objects.create(title='poop',url='http://google.com')
-        comment = Comment(text='butt',content_object=Link)
+        comment = Comment(text='butt',content_object=link)
         comment.link = link
         comment.save()
-        self.assertIn(comment, link.comment_set.all())
+        self.assertIn(comment, Comment.objects.filter(object_id = link.id, content_type=ContentType.objects.get_for_model(link)))

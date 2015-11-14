@@ -1,19 +1,23 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
+from django.contrib.contenttypes.models import ContentType
 
 from .models import Link, Comment
 from .forms import LinkForm
 
 # Create your views here.
-def all_links(request):
+def links(request):
     links = Link.objects.all().order_by('-posted')
-    return render(request, 'posts/all_links.html', {'links': links})
+    return render(request, 'posts/links.html', {'links': links})
 
-def all_comments(request, link_id):
-    link = Link.objects.get(id=link_id)
-    comments = Comment.objects.get(id=link_id)
-    return render(request, 'posts/all_comments.html', {'comments': comments, 'link': link})
+def comments(request, link_id):
+    link = get_object_or_404(Link, pk=link_id)
+    comments = Comment.objects.filter(
+        object_id = link.id,
+        content_type=ContentType.objects.get_for_model(link)
+        ).order_by('-posted')
+    return render(request, 'posts/comments.html', {'comments': comments, 'link': link})
 
 @login_required(login_url='/accounts/login/')
 def submit(request):
