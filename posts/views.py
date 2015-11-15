@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.contenttypes.models import ContentType
 
 from .models import Link, Comment
-from .forms import LinkForm
+from .forms import LinkForm, CommentForm
 
 # Create your views here.
 def links(request):
@@ -16,8 +16,19 @@ def comments(request, link_id):
     comments = Comment.objects.filter(
         object_id = link.id,
         content_type=ContentType.objects.get_for_model(link)
-        ).order_by('-posted')
-    return render(request, 'posts/comments.html', {'comments': comments, 'link': link})
+    ).order_by('-posted')
+    if request.method == 'POST':
+        if request.user.is_authenticated():
+            form = CommentForm(data=request.POST,auto_id=True)
+            if form.is_valid():
+                form.full_clean()
+                form.save()
+                return reverse('comments', kwargs={'link_id':link.id})
+        else:
+            return HttpResponseRedirect('/accounts/login/?next=/{0}/'.format(link.id))
+    else:
+        form = CommentForm(auto_id=True)
+        return render(request, 'posts/comments.html', {'comments': comments, 'link': link, 'form': form})
 
 @login_required(login_url='/accounts/login/')
 def submit(request):

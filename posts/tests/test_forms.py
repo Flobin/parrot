@@ -1,11 +1,13 @@
 from django.test import TestCase
 
-from posts.models import Link
+from posts.models import Link, Comment
 from posts.forms import (
     LinkForm,
     TITLE_LENGTH_ERROR,
     TITLE_EMPTY_ERROR,
     URL_EMPTY_ERROR,
+    CommentForm,
+    TEXT_EMPTY_ERROR,
 )
 
 
@@ -40,3 +42,13 @@ class LinkFormTest(TestCase):
         form = LinkForm(data={'title': 'poop', 'url': 'http://google.com/'})
         form.save()
         self.assertEqual(Link.objects.all().count(), 1)
+
+class CommentFormTest(TestCase):
+
+    def test_form_validation_for_empty_textarea(self):
+        form = CommentForm(data={'text': ''})
+        self.assertFalse(form.is_valid())
+        self.assertEqual(
+            form.errors['text'],
+            [TEXT_EMPTY_ERROR]
+        )

@@ -51,6 +51,20 @@ class CommentsViewTest(TestCase):
         self.assertEqual(comments[0], second_comment)
         self.assertEqual(comments[1], first_comment)
 
+    def displays_comment_form(self):
+        link = Link.objects.create(title='foo',url='http://google.com')
+        response = self.client.get('/{0}/'.format(link.id))
+        self.assertIsInstance(response.context['form'], CommentForm)
+        self.assertContains(response, 'name="text"')
+
+    def test_comments_are_actually_displayed(self):
+        link = Link.objects.create(title='bar',url='http://reddit.com')
+        first_comment = Comment.objects.create(text="poop",content_object=link)
+        second_comment = Comment.objects.create(text="butt",content_object=link)
+        response = self.client.get('/{0}/'.format(link.id))
+        comments = response.context[0]['comments']
+        self.assertGreater(len(comments), 0)
+
 class SubmitViewTest(TestCase):
 
     def setUp(self):

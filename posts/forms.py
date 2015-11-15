@@ -1,10 +1,11 @@
 from django import forms
 from django.forms import ModelForm
-from .models import Link
+from .models import Link, Comment
 
 TITLE_LENGTH_ERROR = "This title is too long, please make it 140 characters or less."
 TITLE_EMPTY_ERROR = "You’ll have to add a title"
 URL_EMPTY_ERROR = "Please enter a valid URL"
+TEXT_EMPTY_ERROR = "Please enter a comment"
 
 class LinkForm(ModelForm):
     class Meta:
@@ -21,5 +22,18 @@ class LinkForm(ModelForm):
             },
             'url': {
                 'required': URL_EMPTY_ERROR,
+            }
+        }
+
+class CommentForm(ModelForm):
+    class Meta:
+        model = Comment
+        fields = ['text']
+        widgets = {
+            'text': forms.Textarea(attrs={'placeholder': 'Enter your comment here'}),
+        }
+        error_messages = {
+            'text': {
+                'required': TEXT_EMPTY_ERROR,
             }
         }

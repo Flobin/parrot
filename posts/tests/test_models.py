@@ -4,7 +4,7 @@ from django.contrib.contenttypes.models import ContentType
 
 from posts.models import Link, Comment
 
-class LinksAndCommentsModelsTest(TestCase):
+class LinkModelTest(TestCase):
 
     def test_can_create_links(self):
         link = Link.objects.create(title='poop',url='http://google.com')
@@ -20,13 +20,20 @@ class LinksAndCommentsModelsTest(TestCase):
             link.save()
             link.full_clean()
 
-    def test_score_is_upvotes_minus_downvotes(self):
+    def test_link_score_is_upvotes_minus_downvotes(self):
         link = Link.objects.create(title='poop',url='http://poop.bike',upvotes=5,downvotes=3)
         self.assertEqual(link.score(),2)
 
+class CommentModelTest(TestCase):
     def test_comment_belongs_to_link(self):
         link = Link.objects.create(title='poop',url='http://google.com')
         comment = Comment(text='butt',content_object=link)
         comment.link = link
         comment.save()
         self.assertIn(comment, Comment.objects.filter(object_id = link.id, content_type=ContentType.objects.get_for_model(link)))
+
+    def test_comment_score_is_upvotes_minus_downvotes(self):
+        link = Link.objects.create(title='butt',url='http://poop.bike')
+        comment = Comment(text='fart',content_object=link,upvotes=5,downvotes=3)
+        comment.link = link
+        self.assertEqual(comment.score(),2)
