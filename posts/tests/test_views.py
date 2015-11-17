@@ -14,6 +14,12 @@ from posts.forms import LinkForm
 
 class HomePageTest(TestCase):
 
+    def setUp(self):
+        user = User.objects.create(username='testuser')
+        user.set_password('12345')
+        user.save()
+        self.client.login(username='testuser', password='12345')
+
     def test_home_page_renders_home_template(self):
         response = self.client.get('/')
         self.assertTemplateUsed(response, 'posts/links.html')
@@ -33,6 +39,11 @@ class HomePageTest(TestCase):
         links = response.context[0]['links']
         self.assertEqual(links[0], second_link)
         self.assertEqual(links[1], first_link)
+
+    def test_displays_link_form(self):
+        response = self.client.get('/')
+        self.assertIsInstance(response.context['form'], LinkForm)
+        self.assertContains(response, 'name="title"')
 
 class CommentsViewTest(TestCase):
 
@@ -64,20 +75,3 @@ class CommentsViewTest(TestCase):
         response = self.client.get('/{0}/'.format(link.id))
         comments = response.context[0]['comments']
         self.assertGreater(len(comments), 0)
-
-class SubmitViewTest(TestCase):
-
-    def setUp(self):
-        user = User.objects.create(username='testuser')
-        user.set_password('12345')
-        user.save()
-        self.client.login(username='testuser', password='12345')
-
-    def test_displays_link_form(self):
-        response = self.client.get('/submit/')
-        self.assertIsInstance(response.context['form'], LinkForm)
-        self.assertContains(response, 'name="title"')
-
-    def test_uses_submit_template(self):
-        response = self.client.get('/submit/')
-        self.assertTemplateUsed(response, 'posts/submit.html')

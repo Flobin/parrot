@@ -9,7 +9,18 @@ from .forms import LinkForm, CommentForm
 # Create your views here.
 def links(request):
     links = Link.objects.all().order_by('-posted')
-    return render(request, 'posts/links.html', {'links': links})
+    if request.method == 'POST':
+        if request.user.is_authenticated():
+            form = LinkForm(data=request.POST,auto_id=True)
+            if form.is_valid():
+                form.full_clean()
+                form.save()
+                return HttpResponseRedirect('/')
+        else:
+            return HttpResponseRedirect('/accounts/login/?next=/')
+    else:
+        form = LinkForm(auto_id=True)
+    return render(request, 'posts/links.html', {'links': links, 'form': form})
 
 def comments(request, link_id):
     link = get_object_or_404(Link, pk=link_id)
@@ -29,15 +40,3 @@ def comments(request, link_id):
     else:
         form = CommentForm(auto_id=True)
         return render(request, 'posts/comments.html', {'comments': comments, 'link': link, 'form': form})
-
-@login_required(login_url='/accounts/login/')
-def submit(request):
-    if request.method == 'POST':
-        form = LinkForm(data=request.POST,auto_id=True)
-        if form.is_valid():
-            form.full_clean()
-            form.save()
-            return HttpResponseRedirect('/')
-    else:
-        form = LinkForm(auto_id=True)
-    return render(request, 'posts/submit.html', {'form': form})
