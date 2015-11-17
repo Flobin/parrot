@@ -37,3 +37,26 @@ class CommentModelTest(TestCase):
         comment = Comment(text='fart',content_object=link,upvotes=5,downvotes=3)
         comment.link = link
         self.assertEqual(comment.score(),2)
+
+    def test_comment_can_belong_to_other_comment(self):
+        link = Link.objects.create(title='poop',url='http://google.com')
+        top_level_comment = Comment(text='butt',content_object=link)
+        top_level_comment.link = link
+        top_level_comment.save()
+        second_level_comment = Comment(text='butt',content_object=top_level_comment)
+        second_level_comment.top_level_comment = top_level_comment
+        second_level_comment.save()
+        self.assertIn(
+            top_level_comment,
+            Comment.objects.filter(
+                object_id = link.id,
+                content_type=ContentType.objects.get_for_model(link)
+            )
+        )
+        self.assertIn(
+            second_level_comment,
+            Comment.objects.filter(
+                object_id = top_level_comment.id,
+                content_type=ContentType.objects.get_for_model(top_level_comment)
+            )
+        )
