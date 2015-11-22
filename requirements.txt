@@ -2,6 +2,7 @@ Django==1.8.3
 PyJWT==1.4.0
 defusedxml==0.4.1
 django-allauth==0.24.1
+django-mptt==0.7.4
 docutils==0.12
 oauthlib==1.0.3
 python3-openid==3.0.9

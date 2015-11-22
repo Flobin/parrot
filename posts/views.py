@@ -24,10 +24,7 @@ def links(request):
 
 def comments(request, link_id):
     link = get_object_or_404(Link, pk=link_id)
-    comments = Comment.objects.filter(
-        object_id = link.id,
-        content_type=ContentType.objects.get_for_model(link)
-    ).order_by('-posted')
+    comments = link.comments.all()
     if request.method == 'POST':
         if request.user.is_authenticated():
             form = CommentForm(data=request.POST,auto_id=True)
@@ -39,4 +36,4 @@ def comments(request, link_id):
             return HttpResponseRedirect('/accounts/login/?next=/{0}/'.format(link.id))
     else:
         form = CommentForm(auto_id=True)
-        return render(request, 'posts/comments.html', {'comments': comments, 'link': link, 'form': form})
+        return render(request, 'posts/comments.html', {'nodes':comments, 'link': link, 'form': form})

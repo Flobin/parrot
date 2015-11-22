@@ -70,8 +70,8 @@ class CommentsViewTest(TestCase):
 
     def test_comments_are_actually_displayed(self):
         link = Link.objects.create(title='bar',url='http://reddit.com')
-        first_comment = Comment.objects.create(text="poop",content_object=link)
-        second_comment = Comment.objects.create(text="butt",content_object=link)
+        first_comment = Comment.objects.create(text="poop",link=link)
+        second_comment = Comment.objects.create(text="butt",link=link)
         response = self.client.get('/{0}/'.format(link.id))
-        comments = response.context[0]['comments']
+        comments = response.context[0]['nodes']
         self.assertGreater(len(comments), 0)

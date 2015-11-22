@@ -45,6 +45,7 @@ INSTALLED_APPS = (
     'allauth.socialaccount',
     'allauth.socialaccount.providers.persona',
     'allauth.socialaccount.providers.twitter',
+    'mptt',
 )
 
 MIDDLEWARE_CLASSES = (
