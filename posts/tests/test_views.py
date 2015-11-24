@@ -47,10 +47,37 @@ class HomePageTest(TestCase):
 
 class CommentsViewTest(TestCase):
 
+    def setUp(self):
+        user = User.objects.create(username='testuser')
+        user.set_password('12345')
+        user.save()
+        self.client.login(username='testuser', password='12345')
+
     def test_comments_view_renders_comments_template(self):
         link = Link.objects.create(title='foo',url='http://google.com')
         response = self.client.get('/{0}/'.format(link.id))
         self.assertTemplateUsed(response, 'posts/comments.html')
+
+    def test_saving_a_POST_request_for_top_level_comment(self):
+        link = Link.objects.create(title='foo',url='http://google.com')
+        self.client.post(
+            '/{0}/'.format(link.id),
+            data={'text': 'A top level comment','link': link,'parent': None}
+        )
+        self.assertEqual(Comment.objects.count(), 1)
+        new_comment = Comment.objects.first()
+        self.assertEqual(new_comment.text, 'A top level comment')
+
+    def test_saving_a_POST_request_for_child_comment(self):
+        link = Link.objects.create(title='foo',url='http://google.com')
+        top_level_comment = Comment.objects.create(text='A top level comment',link=link,parent=None)
+        self.client.post(
+            '/{0}/'.format(link.id),
+            data={'text': 'A child comment','link': link,'parent': None}
+        )
+        self.assertEqual(Comment.objects.count(), 2)
+        child_comment = Comment.objects.last()
+        self.assertEqual(child_comment.text, 'A child comment')
 
     @skip("chronology isn't really important anyway...")
     def test_comments_are_displayed_chronologically(self):

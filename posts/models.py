@@ -28,3 +28,6 @@ class Comment(MPTTModel):
 
     def score(self):
         return self.upvotes - self.downvotes
+
+    def __str__(self):
+        return "Comment {0}, refers to {1}, parent is {2}".format(self.id,self.link,self.parent)

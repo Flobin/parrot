@@ -1,4 +1,5 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
+from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.contenttypes.models import ContentType
@@ -22,16 +23,24 @@ def links(request):
         form = LinkForm(auto_id=True)
     return render(request, 'posts/links.html', {'links': links, 'form': form})
 
-def comments(request, link_id):
+def comments(request, link_id, comment_id=None):
     link = get_object_or_404(Link, pk=link_id)
+    if comment_id is not None:
+        parent = get_object_or_404(Comment, pk=comment_id)
+    else:
+        parent = None
     comments = link.comments.all()
     if request.method == 'POST':
         if request.user.is_authenticated():
             form = CommentForm(data=request.POST,auto_id=True)
             if form.is_valid():
                 form.full_clean()
-                form.save()
-                return reverse('comments', kwargs={'link_id':link.id})
+                new_comment = form.save(commit=False)
+                new_comment.link = link
+                if parent:
+                    new_comment.parent = parent
+                new_comment.save()
+                return redirect('comments', link_id=link.id)
         else:
             return HttpResponseRedirect('/accounts/login/?next=/{0}/'.format(link.id))
     else:
