@@ -4,3 +4,6 @@ projenv
 db.sqlite3
 /static
 .DS_Store
+/posts/static/posts/node_modules
+/posts/static/posts/build
+/posts/static/posts/src/styles/bourbon

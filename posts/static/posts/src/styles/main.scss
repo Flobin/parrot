@@ -1,0 +1,211 @@
+@charset "utf-8";
+/* ==========================================================================
+   INDEX
+========================================================================== */
+/*  CONTENTS
+ *
+ *  GENERAL
+ *  1. SCSS................variables and imports
+ *  2. GENERAL..........body/html/general styles
+ *  3. TYPOGRAPHY...............................
+ *
+ *  4. ETC
+ */
+
+
+/* ==========================================================================
+   #SCSS
+========================================================================== */
+@import 'normalize';
+@import 'bourbon/bourbon';
+
+$S:  480px;
+$M:  768px;
+$L:  1024px;
+$XL:  1200px;
+$XXL: 1680px;
+
+$orange: hsla(357,85%,86%,1);
+$blue: hsla(221,72%,55%,1);
+$green: hsla(122,59%,63%,1);
+$yellow: hsla(59,74%,90%,1);
+$dark-grey: #444;
+$medium-grey: #888;
+$light-grey: #ccc;
+
+$link-color: $blue;
+$link-hover-color: $green;
+
+@mixin at-least($device-width) {
+    @media screen and (min-width: $device-width) {
+        @content
+    }
+}
+
+@mixin until($device-width) {
+    @media screen and (max-width: $device-width - 1) {
+        @content
+    }
+}
+
+/* ==========================================================================
+   #GENERAL
+========================================================================== */
+html {
+    font-style: sans-serif;
+    text-rendering: optimizeLegibility;
+}
+body {
+    color: #333;
+    overflow-x: hidden;
+}
+a, a:visited {
+    color: $link-color;
+    text-decoration: none;
+    @include transition(color 0.3s ease-in-out);
+}
+a:hover {
+    color: $link-hover-color;
+}
+button, a {
+    @include transition(all 0.3s ease-in-out);
+    &:focus, &:active {
+        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        -webkit-tap-highlight-color: transparent;
+        outline: none;
+  }
+}
+button, .button {
+    font-size: 0.75rem;
+    padding: 0.5em;
+    color: #fff;
+    background-color: $link-color;
+    @include transition(background-color 0.3s ease-in-out);
+    &:hover, &:focus, &:active, &:visited {
+        background-color: $link-hover-color;
+    }
+}
+/* ==========================================================================
+   #TYPOGRAPHY
+========================================================================== */
+html, body {
+    line-height: 1.5;
+    font-weight: 300;
+}
+h1,h2,h3,h4,h5,h6 {
+    line-height: 1;
+    font-weight: 500;
+    margin-bottom: 0.5em;
+}
+h1,.h1 {
+    font-size: 3.052rem;
+}
+h2,.h2 {
+    font-size: 2.441rem;
+}
+h3,.h3 {
+    font-size: 1.953rem;
+}
+h4,.h4 {
+    font-size: 1.563rem;
+}
+h5,.h5 {
+    font-size: 1.25rem;
+}
+h6,.h6 {
+    font-size: 1rem;
+}
+
+/* ==========================================================================
+   #LAYOUT
+========================================================================== */
+body {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+}
+.container {
+    width: 100%;
+    @include until($M) {
+        padding: 0 1em;
+    }
+    @include at-least($M) {
+        width: 95%;
+    }
+    @include at-least($L) {
+        width: 80%;
+    }
+    @include at-least($XL) {
+        width: 70%;
+    }
+    max-width: 65rem;
+    margin-left: auto;
+    margin-right: auto;
+}
+.site-header {
+    padding: 1em;
+    margin-bottom: 2rem;
+    @extend .container;
+}
+nav {
+    float: right;
+    display: inline-block;
+}
+#logo {
+    float: left;
+    width: 3rem;
+    height: 3rem;
+    display: inline-block;
+    margin-right: 1em;
+}
+#site-title {
+    display: inline-block;
+    font-weight: bold;
+}
+#auth {
+
+}
+.content {
+    flex: 1;
+}
+.site-footer{
+
+}
+
+
+/* ==========================================================================
+   #LINKS
+========================================================================== */
+#links {
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    list-style-type: none;
+}
+.link {
+    margin-bottom: 2rem;
+}
+.submit {
+
+}
+
+
+/* ==========================================================================
+   #FORMS
+========================================================================== */
+::-webkit-input-placeholder {
+    color: $light-grey;
+}
+:-moz-placeholder { /* Firefox 18- */
+    color: $light-grey;
+}
+::-moz-placeholder {  /* Firefox 19+ */
+    color: $light-grey;
+}
+:-ms-input-placeholder {
+    color: $light-grey;
+}
+input[type=text],textarea {
+    border: 1px solid $medium-grey;
+    font-size: 0.75rem;
+    padding: 0.5rem;
+}

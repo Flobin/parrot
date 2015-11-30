@@ -20,9 +20,8 @@
             {% endif %}
             <form class="vote-form" action="/vote_comment/{{ node.id }}" method="POST">
                 {% csrf_token %}
-                <input class="vote-radio upvote" type="radio" name="vote-{{node.id}}" id="upvote-{{node.id}}" value="upvote-{{node.id}}" /><label class="vote-label upvote" for="upvote-{{node.id}}">upvote</label>
-                <input class="vote-radio downvote" type="radio" name="vote-{{node.id}}" id="downvote-{{node.id}}" value="downvote-{{node.id}}" /><label class="vote-label downvote" for="downvote-{{node.id}}">downvote</label>
-                <input class="vote-submit" type="submit" value="submit">
+                <input class="vote-submit button" type="submit" name="submit_vote_button" value="upvote">
+                <input class="vote-submit button" type="submit" name="submit_vote_button" value="downvote">
             </form>
             <form action="/{{ link.id }}/{{ node.id }}/" method="POST" class="comment-form">
                 {% csrf_token %}
@@ -32,7 +31,7 @@
                     <p class="help">{{ field.help_text|safe }}</p>
                     {% endif %}
                 {% endfor %}
-                <input type="submit" value="submit">
+                <input class="button" type="submit" value="submit">
             </form>
         </li>
     {% endrecursetree %}

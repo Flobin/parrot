@@ -3,23 +3,8 @@
 {% block title_addition %}Front Page{% endblock title_addition %}
 
 {% block links %}
-<ul id="links">
-    {% for link in links %}
-    <li class="link" id="{{ link.id }}">
-        <a href="{{ link.url }}" target="_blank" class="link-title">{{ link.title }}</a><br>
-        <span class="link-score">{{ link.score }} points</span><br>
-        <a href="/{{ link.id }}">comments</a>
-        <form class="vote-form" action="/vote_link/{{ link.id }}" method="POST">
-            {% csrf_token %}
-            <input class="vote-submit" type="submit" name="submit_vote_button" value="upvote">
-            <input class="vote-submit" type="submit" name="submit_vote_button" value="downvote">
-        </form>
-    </li>
-    {% endfor %}
-</ul>
-
 <div class="submit">
-    <h2>Submit a new link</h2>
+    <h2 class="h3">Submit a new link</h2>
 
     {% if form.errors %}
         {% for field in form %}
@@ -43,7 +28,22 @@
             <p class="help">{{ field.help_text|safe }}</p>
             {% endif %}
         {% endfor %}
-        <input type="submit" value="submit">
+        <input class="button" type="submit" value="submit">
     </form>
 </div>
+
+<ul id="links">
+    {% for link in links %}
+    <li class="link" id="{{ link.id }}">
+        <a href="{{ link.url }}" target="_blank" class="link-title">{{ link.title }}</a><br>
+        <span class="link-score">score: {{ link.score }}</span><br>
+        <a href="/{{ link.id }}">comments</a>
+        <form class="vote-form" action="/vote_link/{{ link.id }}" method="POST">
+            {% csrf_token %}
+            <input class="vote-submit button" type="submit" name="submit_vote_button" value="upvote">
+            <input class="vote-submit button" type="submit" name="submit_vote_button" value="downvote">
+        </form>
+    </li>
+    {% endfor %}
+</ul>
 {% endblock links%}
