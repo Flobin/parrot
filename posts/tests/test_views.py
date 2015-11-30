@@ -10,7 +10,7 @@ from django.contrib.auth.models import User
 
 from posts.views import links, comments
 from posts.models import Link, Comment
-from posts.forms import LinkForm
+from posts.forms import LinkForm, CommentForm
 
 class HomePageTest(TestCase):
 
@@ -44,6 +44,15 @@ class HomePageTest(TestCase):
         response = self.client.get('/')
         self.assertIsInstance(response.context['form'], LinkForm)
         self.assertContains(response, 'name="title"')
+
+    def test_can_vote_on_link(self):
+        link = Link.objects.create(title='foo',url='http://google.com',upvotes=5,downvotes=3)
+        response = self.client.post(
+            '/vote_link/{0}'.format(link.id),
+            data={'submit_vote_button': 'upvote'}
+        )
+        updated_link = Link.objects.get(pk=link.id)
+        self.assertEqual(updated_link.score, 3)
 
 class CommentsViewTest(TestCase):
 

@@ -24,7 +24,7 @@ class LinkModelTest(TestCase):
 
     def test_link_score_is_upvotes_minus_downvotes(self):
         link = Link.objects.create(title='poop',url='http://poop.bike',upvotes=5,downvotes=3)
-        self.assertEqual(link.score(),2)
+        self.assertEqual(link.score,2)
 
 class CommentModelTest(TestCase):
     def test_comment_belongs_to_link(self):
@@ -36,7 +36,7 @@ class CommentModelTest(TestCase):
     def test_comment_score_is_upvotes_minus_downvotes(self):
         link = Link.objects.create(title='butt',url='http://poop.bike')
         comment = Comment(text='fart',parent=None,link=link,upvotes=5,downvotes=3)
-        self.assertEqual(comment.score(),2)
+        self.assertEqual(comment.score,2)
 
     def test_comment_can_belong_to_other_comment(self):
         link = Link.objects.create(title='poop',url='http://google.com')

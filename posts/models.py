@@ -12,6 +12,7 @@ class Link(models.Model):
     upvotes = models.IntegerField(default=0)
     downvotes = models.IntegerField(default=0)
 
+    @property
     def score(self):
         return self.upvotes - self.downvotes
 
@@ -26,6 +27,7 @@ class Comment(MPTTModel):
     link = models.ForeignKey('Link', related_name='comments')
     parent = TreeForeignKey('self', null=True, blank=True, related_name='children', db_index=True)
 
+    @property
     def score(self):
         return self.upvotes - self.downvotes
 

@@ -3,6 +3,7 @@ from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.contenttypes.models import ContentType
+from django.db.models import F
 
 from .models import Link, Comment
 from .forms import LinkForm, CommentForm
@@ -46,3 +47,18 @@ def comments(request, link_id, comment_id=None):
     else:
         form = CommentForm(auto_id=True)
         return render(request, 'posts/comments.html', {'nodes':comments, 'link': link, 'form': form})
+
+def vote_link(request, link_id=None):
+    link = Link.objects.get(pk=link_id)
+    if request.user.is_authenticated():
+        submit_vote_button = request.POST.get('submit_vote_button')
+        if submit_vote_button == 'upvote':
+            link.upvotes = F('upvotes') + 1
+            link.save()
+            return HttpResponseRedirect('/#{0}'.format(link.id))
+        elif submit_vote_button == 'downvote':
+            link.downvotes = F('downvotes') + 1
+            link.save()
+            return HttpResponseRedirect('/#{0}'.format(link.id))
+    else:
+        return HttpResponseRedirect('/accounts/login/?next=/#{0}'.format(link.id))

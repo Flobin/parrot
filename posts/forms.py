@@ -6,6 +6,7 @@ TITLE_LENGTH_ERROR = "This title is too long, please make it 140 characters or l
 TITLE_EMPTY_ERROR = "You’ll have to add a title"
 URL_EMPTY_ERROR = "Please enter a valid URL"
 TEXT_EMPTY_ERROR = "Please enter a comment"
+VOTE_CHOICES = ('upvote', 'downvote')
 
 class LinkForm(ModelForm):
     class Meta:
