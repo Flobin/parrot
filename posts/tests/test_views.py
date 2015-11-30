@@ -111,3 +111,13 @@ class CommentsViewTest(TestCase):
         response = self.client.get('/{0}/'.format(link.id))
         comments = response.context[0]['nodes']
         self.assertGreater(len(comments), 0)
+
+    def test_can_vote_on_comment(self):
+        link = Link.objects.create(title='foo',url='http://google.com')
+        comment = Comment.objects.create(text="poop",link=link,upvotes=5,downvotes=3)
+        response = self.client.post(
+            '/vote_comment/{0}/{1}'.format(link.id,comment.id),
+            data={'submit_vote_button': 'downvote'}
+        )
+        updated_comment = Comment.objects.get(pk=comment.id)
+        self.assertEqual(updated_comment.score, 1)

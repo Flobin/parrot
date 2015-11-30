@@ -62,3 +62,19 @@ def vote_link(request, link_id=None):
             return HttpResponseRedirect('/#{0}'.format(link.id))
     else:
         return HttpResponseRedirect('/accounts/login/?next=/#{0}'.format(link.id))
+
+def vote_comment(request, link_id=None, comment_id=None):
+    link = Link.objects.get(pk=link_id)
+    comment = Comment.objects.get(pk=comment_id)
+    if request.user.is_authenticated():
+        submit_vote_button = request.POST.get('submit_vote_button')
+        if submit_vote_button == 'upvote':
+            comment.upvotes = F('upvotes') + 1
+            comment.save()
+            return HttpResponseRedirect('/{0}/#{1}'.format(link.id, comment.id))
+        elif submit_vote_button == 'downvote':
+            comment.downvotes = F('downvotes') + 1
+            comment.save()
+            return HttpResponseRedirect('/{0}/#{1}'.format(link.id, comment.id))
+    else:
+        return HttpResponseRedirect('/accounts/login/?next=/{0}/#{1}'.format(link.id, comment.id))
