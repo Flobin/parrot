@@ -14,7 +14,7 @@ class LinkForm(ModelForm):
         fields = ['title', 'url']
         widgets = {
             'title': forms.TextInput(attrs={'placeholder': 'Enter a descriptive title'}),
-            'url': forms.TextInput(attrs={'placeholder': 'The link'}),
+            'url': forms.URLInput(attrs={'placeholder': 'The link'}),
         }
         error_messages = {
             'title': {

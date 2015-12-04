@@ -1,6 +1,6 @@
 {% load staticfiles %}
 <!doctype html>
-<html lang="en-US">
+<html class="no-js" lang="en-US">
     <head>
         <meta charset="utf-8">
         <meta http-equiv="x-ua-compatible" content="ie=edge">
@@ -10,7 +10,7 @@
 
         <link rel="stylesheet" type="text/css" href="{% static 'posts/build/css/main.min.css' %}" />
     </head>
-    <body>
+    <body class="{% block body_class %}{% endblock %}" id="body">
         <header class="site-header">
             <a href="/">
                 <img src="{% static 'posts/build/img/logo_1000.png' %}" alt="parrot logo" id="logo">
@@ -43,6 +43,6 @@
         <footer class="site-footer">
         </footer>
 
-        <script src="{% static 'posts/build/js/main.min.js' %}"></script>
+        <script src="{% static 'posts/build/js/main.js' %}"></script>
     </body>
 </html>

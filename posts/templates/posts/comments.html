@@ -1,38 +1,61 @@
 {% extends 'posts/base.html' %}
 
+{% block body_class %}comments{% endblock body_class %}
+
 {% load mptt_tags %}
 
 {% block title_addition %}Comments{% endblock title_addition %}
 
 {% block comments %}
 
-<h1>Comments for: {{ link }}</h1>
+<h1>{{ link }}</h1>
 
-<ul class="comments">
+<h2 class="comment-section-title">Reply</h2>
+
+<form action="/{{ link.id }}/{{ node.id }}/" method="POST" class="comment-form-top" id="comment-form-{{ node.id }}">
+    {% csrf_token %}
+    {% for field in form %}
+        {{ field.label_tag }} {{ field }}
+        {% if field.help_text %}
+        <p class="help">{{ field.help_text|safe }}</p>
+        {% endif %}
+    {% endfor %}
+    <input class="button" type="submit" value="submit">
+</form>
+
+<h2 class="comment-section-title">Comments</h2>
+
+<ul id="comments">
     {% recursetree nodes %}
         <li class="comment" id="{{ node.id }}">
-            {{ node.text }}<br>
-            {{ node.score }} points
+            <div class="comment-body">
+                {{ node.text }}
+            </div>
+            <div class="comment-meta">
+                <span class="comment-posted">posted on: {{ node.posted }}</span> &mdash;
+                <span class="comment-points">{{ node.score }} points</span>
+                <form class="vote-form" action="/vote_comment/{{ node.id }}" method="POST">
+                    {% csrf_token %}
+                    <input class="vote-submit button" type="submit" name="submit_vote_button" value="upvote">
+                    <input class="vote-submit button" type="submit" name="submit_vote_button" value="downvote">
+                </form>
+                <a class="show-comment-form" id="show-comment-form-{{ node.id }}">Reply</a>
+                <form action="/{{ link.id }}/{{ node.id }}/" method="POST" class="comment-form" id="comment-form-{{ node.id }}">
+                    {% csrf_token %}
+                    {% for field in form %}
+                        {{ field.label_tag }} {{ field }}
+                        {% if field.help_text %}
+                        <p class="help">{{ field.help_text|safe }}</p>
+                        {% endif %}
+                    {% endfor %}
+                    <input class="button" type="submit" value="submit">
+                </form>
+            </div>
             {% if not node.is_leaf_node %}
                 <ul class="children">
                     {{ children }}
                 </ul>
             {% endif %}
-            <form class="vote-form" action="/vote_comment/{{ node.id }}" method="POST">
-                {% csrf_token %}
-                <input class="vote-submit button" type="submit" name="submit_vote_button" value="upvote">
-                <input class="vote-submit button" type="submit" name="submit_vote_button" value="downvote">
-            </form>
-            <form action="/{{ link.id }}/{{ node.id }}/" method="POST" class="comment-form">
-                {% csrf_token %}
-                {% for field in form %}
-                    {{ field.label_tag }} {{ field }}
-                    {% if field.help_text %}
-                    <p class="help">{{ field.help_text|safe }}</p>
-                    {% endif %}
-                {% endfor %}
-                <input class="button" type="submit" value="submit">
-            </form>
         </li>
     {% endrecursetree %}
 </ul>

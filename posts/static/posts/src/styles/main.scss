@@ -143,7 +143,7 @@ body {
     margin-right: auto;
 }
 .site-header {
-    padding: 1em;
+    padding: 1em 0;
     margin-bottom: 2rem;
     @extend .container;
 }
@@ -166,7 +166,9 @@ nav {
 
 }
 .content {
-    flex: 1;
+    @include at-least($L) {
+
+    }
 }
 .site-footer{
 
@@ -180,14 +182,52 @@ nav {
     margin-top: 2rem;
     margin-bottom: 2rem;
     list-style-type: none;
+    @include at-least($M){
+        float: left;
+        width: calc(70% - 3rem);
+        margin: 0 3rem 0 0;
+    }
 }
 .link {
     margin-bottom: 2rem;
 }
-.submit {
+.link-title {
+    font-weight: normal;
+}
+.submit-link {
+    @include at-least($M) {
+        float: right;
+        width: 30%;
+    }
+    form {
+        display: table;
+        position: relative;
+        width: 100%;
+    }
+}
+.error-message {
+    margin-bottom: 0.25rem;
+}
+.submit-link-row {
+    display: table-row;
+    margin-bottom: 0.5rem;
+}
+label[for=url],label[for=title] {
+    display: table-cell;
+    padding: 0.25rem 1rem 0.75rem 0;
+    width: 3.5rem;
+}
+#title, #url {
+    min-width: calc(100% - 3.5rem);
+}
+#title, #url, .submit-link .button {
+    display: table-cell;
+    position: absolute;
+    right: 0;
+}
+.submit-link .button {
 
 }
-
 
 /* ==========================================================================
    #FORMS
@@ -204,8 +244,64 @@ nav {
 :-ms-input-placeholder {
     color: $light-grey;
 }
-input[type=text],textarea {
+input[type=text],input[type=url],textarea {
     border: 1px solid $medium-grey;
     font-size: 0.75rem;
     padding: 0.5rem;
+}
+
+/* ==========================================================================
+   #COMMENTS
+========================================================================== */
+#comments {
+    list-style-type: none;
+    ul {
+        list-style-type: none;
+    }
+    li {
+        margin-bottom: 1rem;
+    }
+}
+.comment-section-title {
+    margin-top: 2rem;
+}
+.comment-body {
+    font-weight: normal;
+}
+.children {
+    margin: 1rem 0 0 2rem;
+    li {
+        &:last-child {
+            margin-bottom: 1rem;
+        }
+    }
+}
+.comment-meta {
+    margin-top: 0.5rem;
+    //font-size: 0.75rem;
+}
+.comment-points {
+}
+.show-comment-form {
+    cursor: pointer;
+}
+#comments {
+    .vote-form {
+        margin: 0.25rem 0 0.25rem 0;
+    }
+}
+.comment-form {
+    margin-top: 0.25rem;
+    @include transition(all 0.3s ease-in-out);
+}
+.js .comment-form {
+    max-height: 1px;
+    opacity: 0;
+    &.shown {
+        max-height: 100vh;
+        opacity: 1;
+    }
+}
+.comment-form-top {
+    margin-bottom: 2rem;
 }

@@ -1,21 +1,23 @@
 {% extends 'posts/base.html' %}
 
+{% block body_class %}links{% endblock body_class %}
+
 {% block title_addition %}Front Page{% endblock title_addition %}
 
 {% block links %}
-<div class="submit">
+<div class="submit-link">
     <h2 class="h3">Submit a new link</h2>
 
     {% if form.errors %}
         {% for field in form %}
             {% for error in field.errors %}
-                <p>
+                <p class="error-message">
                     <strong>{{ error|escape }}</strong>
                 </p>
             {% endfor %}
         {% endfor %}
         {% for error in form.non_field_errors %}
-            <p>
+            <p class="error-message">
                 <strong>{{ error|escape }}</strong>
             </p>
         {% endfor %}
@@ -23,12 +25,12 @@
     <form action="/" method="POST">
         {% csrf_token %}
         {% for field in form %}
-            {{ field.label_tag }} {{ field }}
+            <div class="submit-link-row">{{ field.label_tag }} {{ field }}</div>
             {% if field.help_text %}
             <p class="help">{{ field.help_text|safe }}</p>
             {% endif %}
         {% endfor %}
-        <input class="button" type="submit" value="submit">
+        <div class="submit-link-row"><input class="button" type="submit" value="submit"></div>
     </form>
 </div>
 
