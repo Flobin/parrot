@@ -12,7 +12,7 @@ You will need the following things properly installed on your computer.
 
 ## Installation
 
-* `git clone <repository-url>` this repository
+* `git clone https://github.com/Flobin/parrot.git` this repository
 * change into the new directory
 * (optional) set up a virtual environment
 * `pip install -r requirements.txt`
@@ -32,7 +32,7 @@ And if you want to change templates/css:
 ### Running Tests
 
 * `python manage.py test posts`
-* `python manage.py test functional_tests`
+* `python manage.py test functional_tests` (broken as of right now)
 
 ### Deploying
 
