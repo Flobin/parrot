@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.core.urlresolvers import reverse
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.contenttypes.models import ContentType
@@ -8,9 +9,11 @@ from django.db.models import F
 from .models import Link, Comment
 from .forms import LinkForm, CommentForm
 
-# Create your views here.
 def links(request):
-    links = Link.objects.all().order_by('-posted')
+    all_links = Link.objects.all().order_by('-posted')
+    paginator = Paginator(all_links, 10) #show 10 links per page
+    page = request.GET.get('page')
+
     if request.method == 'POST':
         if request.user.is_authenticated():
             form = LinkForm(data=request.POST,auto_id=True)
@@ -22,6 +25,14 @@ def links(request):
             return HttpResponseRedirect('/accounts/login/?next=/')
     else:
         form = LinkForm(auto_id=True)
+        try:
+            links = paginator.page(page)
+        except PageNotAnInteger:
+            # in case of invalid page, serve homepage, should probably add error message
+            links = paginator.page(1)
+        except EmtyPage:
+            # If page is out of range (e.g. 9999), deliver last page of results.
+            links = paginator.page(paginator.num_pages)
     return render(request, 'posts/links.html', {'links': links, 'form': form})
 
 def comments(request, link_id, comment_id=None):

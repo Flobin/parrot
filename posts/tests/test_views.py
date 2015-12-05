@@ -54,6 +54,14 @@ class HomePageTest(TestCase):
         updated_link = Link.objects.get(pk=link.id)
         self.assertEqual(updated_link.score, 3)
 
+    def test_pagination(self):
+        for i in range(12):
+            i = Link.objects.create(title='foo{0}'.format(i),url='http://google.com/{0}'.format(i))
+        first_page = self.client.get('/')
+        self.assertContains(first_page, "Page 1 of")
+        second_page = self.client.get('/?page=2')
+        self.assertContains(second_page, "Page 2 of")
+
 class CommentsViewTest(TestCase):
 
     def setUp(self):

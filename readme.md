@@ -52,10 +52,12 @@ No idea yet
     * Sorting by score and time (like reddit)
     * Sorting by upvotes/downvotes
     * Only showing posts from a certain time period
-* Pagination for links
+* <del>Pagination for links</del>
+* Pagination for comments (?)
 * Restrict nesting for comments (maybe)
 * Sign up / log in:
     * Style templates
     * Write proper test
 * Switch to proper database (probably Postgres)
 * Figure out deployment
+* Add pages (about, etc.)

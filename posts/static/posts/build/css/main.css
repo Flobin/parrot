@@ -494,6 +494,12 @@ label[for=url], label[for=title] {
   position: absolute;
   right: 0; }
 
+.pagination {
+  display: block;
+  width: 100%;
+  text-align: center;
+  margin-bottom: 3rem; }
+
 /* ==========================================================================
    #FORMS
 ========================================================================== */
